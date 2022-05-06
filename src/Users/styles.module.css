@@ -1,14 +1,76 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+  to {
+    width: 11%;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    width: 11%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  width: 80%;
+  min-height: 120%;
+  height: 120%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.colorContainer {
+  display: flex;
+  flex-direction: column;
+  width: 11%;
+  min-height: 120%;
+  height: 120%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: #fff;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+  animation: fadeIn 0.5s;
+}
+
+.hideContainer {
+  animation: fadeOut 0.5s;
+}
+
+.colorCircle {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.colorHide {
+  animation: fadeOut 1s;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   width: 80%;
   min-height: 120%;
   height: 120%;
   max-width: 700px;
-  margin: 0 auto;
 }
 
 .containerEditColor {
@@ -24,7 +86,6 @@
 
 .containerHeader {
   display: flex;
-  background: #42c1c7;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   width: 100%;
@@ -43,6 +104,10 @@
   margin-top: 50px;
   border: #42c1c7 solid 1px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.circleActive {
+  cursor: pointer;
 }
 
 .logo {
@@ -80,7 +145,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
+  width: fit-content;
   height: 100%;
   border-radius: 10px;
   margin-top: 50px;
@@ -138,11 +203,9 @@
   padding: 10px;
   font-size: 20px;
   width: 40%;
-  background-color: #42c1c7;
-  color: #000;
+  color: #fff;
   cursor: pointer;
   font-size: large;
-  border: #42c1c7 solid 1px;
   align-self: center;
   justify-content: center;
   margin-bottom: 30px;
@@ -179,3 +242,8 @@
   justify-content: center;
   margin-bottom: 30px;
 }
+
+.bg_1 {
+  background: #42c1c7;
+}
+

@@ -6,26 +6,33 @@ import logo from "../assets/logo.png";
 import Switch from "react-switch";
 import { MdModeEdit } from "react-icons/md";
 
+interface IColors {
+  colors: string;
+  fontColor: string;
+  index: number;
+}
+
 function Users() {
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const [name, setName] = React.useState<string>("");
+  const [color, setColor] = React.useState<string>("");
+  const [fontColor, setFontColor] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("enzo@gmail.com");
   const [phone, setPhone] = React.useState<string>("");
-  const [color, setColor] = React.useState<string>("");
   const [nationality, setNationality] = React.useState<string>("");
-  const [photo, setPhoto] = React.useState<string>("");
-  const [checked, setChecked] = React.useState<boolean>(false);
 
+  const [checked, setChecked] = React.useState<boolean>(false);
   const handleChange = (nextChecked: any) => {
     setChecked(nextChecked);
   };
-
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
   const files = acceptedFiles.map((file) => (
     <li key={file.name}>
       {file.name} - {file.size} bytes
     </li>
   ));
+
+  const [file, setFile] = React.useState<JSX.Element[]>(files);
 
   const handleUser = React.useCallback(async () => {
     try {
@@ -46,7 +53,6 @@ function Users() {
       setColor(result.color);
       setNationality(result.nationality);
       setEmail(result.email);
-      setPhoto(result.photo);
     } catch (error: any) {
       console.log("UserService", error.response.data);
       return false;
@@ -75,16 +81,76 @@ function Users() {
     }
   }, [color, email, handleUser, name, nationality, phone]);
 
+  const handleUpdatePhoto = React.useCallback(async () => {
+    try {
+      const resultUpdatePhoto = await UserService.updatePhoto({
+        file,
+      });
+
+      if (!resultUpdatePhoto) {
+        return false;
+      }
+
+      return console.log("resultUpdatePhoto", resultUpdatePhoto);
+    } catch (error: any) {
+      console.log("updatePhoto", error.response.data);
+      return false;
+    }
+  }, [file]);
+
   React.useEffect(() => {
     handleUser();
   }, []);
 
+  const colors: IColors[] = [
+    { colors: "#42c1c7", fontColor: "#fff", index: 0 },
+    { colors: "#fefe33", fontColor: "#000",index: 1 },
+    { colors: "#fabc02", fontColor: "#fff",index: 2 },
+    { colors: "#fb9902", fontColor: "#fff",index: 3 },
+    { colors: "#fd5308", fontColor: "#fff",index: 4 },
+    { colors: "#fe2712", fontColor: "#fff",index: 5 },
+    { colors: "#a7194b", fontColor: "#fff",index: 6 },
+    { colors: "#8601af", fontColor: "#fff",index: 7 },
+    { colors: "#3d01a4", fontColor: "#fff",index: 8 },
+    { colors: "#0247fe", fontColor: "#fff",index: 9 },
+    { colors: "#0392ce", fontColor: "#fff",index: 10 },
+    { colors: "#66b032", fontColor: "#fff",index: 11 },
+    { colors: "#d0ea2b", fontColor: "#000",index: 12 },
+  ];
+
   return (
-    <>
+    <div className={styles.mainContainer}>
+      <div
+        className={
+          checked
+            ? styles.colorContainer
+            : `${styles.hideCircle} ${styles.hideContainer}`
+        }
+      >
+        {colors.map((color: IColors) => (
+          <div
+            key={color.index}
+            className={
+              checked
+                ? styles.colorCircle
+                : `${styles.hideCircle} ${styles.hideContainer}`
+            }
+            style={{ backgroundColor: color.colors }}
+            onClick={() => {
+              setColor(color.colors);
+              setFontColor(color.fontColor);
+            }}
+          ></div>
+        ))}
+      </div>
+
       <div className={styles.container}>
-        <div className={styles.containerHeader}>
+        <div
+          className={styles.containerHeader}
+          style={{ backgroundColor: color }}
+        >
           {checked ? (
-            <div {...getRootProps()}>
+            <div {...getRootProps()} className={styles.circleActive}>
               <input {...getInputProps()} />
               <div className={styles.circleLogo}>
                 <img src={logo} className={styles.logo} alt="logo" />
@@ -103,7 +169,7 @@ function Users() {
         <div className={styles.form}>
           <div className={styles.toggle}>
             <Switch
-              onColor={"#00BFFF"}
+              onColor={color}
               offColor={"#e0e0e0"}
               uncheckedIcon={false}
               checkedIcon={false}
@@ -186,15 +252,17 @@ function Users() {
         </div>
         <input
           disabled={!checked}
+          style={{ backgroundColor: color, color: fontColor }}
           className={checked ? styles.button : styles.buttonDisabled}
           onClick={() => {
-            handleUpdateUser();
+            // handleUpdateUser();
+            handleUpdatePhoto();
           }}
           type="submit"
           value="Editar"
         />
       </div>
-    </>
+    </div>
   );
 }
 

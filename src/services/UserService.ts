@@ -8,9 +8,6 @@ interface IUser {
   color: string;
   nationality: string;
 }
-interface IPhoto {
-  file: string;
-}
 
 class UserService {
   async getUser({ email }: IUser) {
@@ -36,11 +33,11 @@ class UserService {
     }
   }
 
-  async updatePhoto({ file }: { file: string }) {
+  async updatePhoto({ file }: { file: JSX.Element[] }) {
     const formData = new FormData();
     formData.append("file", {
       file,
-      name: "selfie.jpg",
+      name: "user.jpg",
       type: "image/jpeg",
     });
     try {
@@ -53,7 +50,7 @@ class UserService {
 
       return response.data;
     } catch (error: any) {
-      console.log("updateUser", error.response.data);
+      console.log("updatePhoto", error.response.data);
 
       return false;
     }
