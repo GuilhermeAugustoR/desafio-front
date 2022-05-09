@@ -8,6 +8,28 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState<string>("enzo@gmail.com");
   const [password, setPassword] = React.useState<string>("123456");
+  const [color, setColor] = React.useState<string>("");
+  const [photo, setPhoto] = React.useState<string>("");
+
+  const handleUpdateUser = React.useCallback(async () => {
+    try {
+      const resultUpdate = await LoginService.getDataUser({
+        email,
+        color,
+        photo,
+      });
+
+      if (!resultUpdate) {
+        return false;
+      }
+
+      setColor(resultUpdate.color);
+      setPhoto(resultUpdate.photo);
+    } catch (error: any) {
+      console.log("handleUpdateUser", error.response.data);
+      return false;
+    }
+  }, [color, email, photo]);
 
   const handleLogin = React.useCallback(async () => {
     try {
@@ -27,11 +49,18 @@ function Login() {
     }
   }, [email, navigate, password]);
 
+  React.useEffect(() => {
+    handleUpdateUser();
+  }, [handleUpdateUser]);
+
   return (
     <div className={styles.container}>
-      <div className={styles.containerHeader}>
+      <div
+        className={styles.containerHeader}
+        style={{ backgroundColor: color }}
+      >
         <div className={styles.circleLogo}>
-          <img src={Logo} className={styles.logo} alt="logo" />
+          <img src={photo} className={styles.logo} alt="logo" />
         </div>
       </div>
 
@@ -66,6 +95,7 @@ function Login() {
       </div>
       <input
         disabled={!email || !password}
+        style={{ backgroundColor: color, color: "#fff" }}
         className={styles.button}
         onClick={() => {
           handleLogin();

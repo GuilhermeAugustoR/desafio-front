@@ -9,6 +9,12 @@ interface IToken {
   access_token: string;
 }
 
+interface IUser {
+  email: string;
+  color: string;
+  photo: string;
+}
+
 class LoginService {
   async login({ email, password }: ILogin) {
     const body = { email, password };
@@ -24,6 +30,17 @@ class LoginService {
       return response.data;
     } catch (error: any) {
       console.log("login", error);
+      return false;
+    }
+  }
+
+  async getDataUser({ email }: IUser) {
+    try {
+      const response = await api.get(`/user?email=${email}`);
+
+      return response.data;
+    } catch (error: any) {
+      console.log("getDataUser", error);
       return false;
     }
   }
