@@ -47,10 +47,10 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: auto;
   justify-content: center;
-  flex: 1;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 .label {
@@ -58,16 +58,13 @@
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 500px;
   align-items: flex-start;
 }
 
 .input {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 10px 15px;
-  width: 60%;
+  padding: 10px;
   margin-bottom: 30px;
   font-size: 17px;
   color: #777;

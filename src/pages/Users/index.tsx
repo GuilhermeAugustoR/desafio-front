@@ -1,8 +1,8 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import UserService from "../services/UserService";
+import UserService from "../../services/UserService";
 import styles from "./styles.module.css";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 import Switch from "react-switch";
 import { MdModeEdit } from "react-icons/md";
 
@@ -20,6 +20,8 @@ function Users() {
   const [email, setEmail] = React.useState<string>("enzo@gmail.com");
   const [phone, setPhone] = React.useState<string>("");
   const [nationality, setNationality] = React.useState<string>("");
+  const [isValid, setIsValid] = React.useState<boolean>(false);
+  // const [file, setFile] = React.useState<JSX.Element[]>(files);
 
   const [checked, setChecked] = React.useState<boolean>(false);
   const handleChange = (nextChecked: any) => {
@@ -27,12 +29,8 @@ function Users() {
   };
 
   const files = acceptedFiles.map((file) => (
-    <li key={file.name}>
-      {file.name} - {file.size} bytes
-    </li>
+    <img src={URL.createObjectURL(file)} alt="logo" />
   ));
-
-  const [file, setFile] = React.useState<JSX.Element[]>(files);
 
   const handleUser = React.useCallback(async () => {
     try {
@@ -84,8 +82,10 @@ function Users() {
   const handleUpdatePhoto = React.useCallback(async () => {
     try {
       const resultUpdatePhoto = await UserService.updatePhoto({
-        file,
+        file: files,
       });
+
+      console.log("file", files);
 
       if (!resultUpdatePhoto) {
         return false;
@@ -96,7 +96,7 @@ function Users() {
       console.log("updatePhoto", error.response.data);
       return false;
     }
-  }, [file]);
+  }, [files]);
 
   React.useEffect(() => {
     handleUser();
@@ -104,18 +104,18 @@ function Users() {
 
   const colors: IColors[] = [
     { colors: "#42c1c7", fontColor: "#fff", index: 0 },
-    { colors: "#fefe33", fontColor: "#000",index: 1 },
-    { colors: "#fabc02", fontColor: "#fff",index: 2 },
-    { colors: "#fb9902", fontColor: "#fff",index: 3 },
-    { colors: "#fd5308", fontColor: "#fff",index: 4 },
-    { colors: "#fe2712", fontColor: "#fff",index: 5 },
-    { colors: "#a7194b", fontColor: "#fff",index: 6 },
-    { colors: "#8601af", fontColor: "#fff",index: 7 },
-    { colors: "#3d01a4", fontColor: "#fff",index: 8 },
-    { colors: "#0247fe", fontColor: "#fff",index: 9 },
-    { colors: "#0392ce", fontColor: "#fff",index: 10 },
-    { colors: "#66b032", fontColor: "#fff",index: 11 },
-    { colors: "#d0ea2b", fontColor: "#000",index: 12 },
+    { colors: "#fefe33", fontColor: "#000", index: 1 },
+    { colors: "#fabc02", fontColor: "#fff", index: 2 },
+    { colors: "#fb9902", fontColor: "#fff", index: 3 },
+    { colors: "#fd5308", fontColor: "#fff", index: 4 },
+    { colors: "#fe2712", fontColor: "#fff", index: 5 },
+    { colors: "#a7194b", fontColor: "#fff", index: 6 },
+    { colors: "#8601af", fontColor: "#fff", index: 7 },
+    { colors: "#3d01a4", fontColor: "#fff", index: 8 },
+    { colors: "#0247fe", fontColor: "#fff", index: 9 },
+    { colors: "#0392ce", fontColor: "#fff", index: 10 },
+    { colors: "#66b032", fontColor: "#fff", index: 11 },
+    { colors: "#d0ea2b", fontColor: "#000", index: 12 },
   ];
 
   return (
@@ -144,7 +144,7 @@ function Users() {
         ))}
       </div>
 
-      <div className={styles.container}>
+      <div className={checked ? styles.container : styles.containerEdit}>
         <div
           className={styles.containerHeader}
           style={{ backgroundColor: color }}
@@ -154,7 +154,10 @@ function Users() {
               <input {...getInputProps()} />
               <div className={styles.circleLogo}>
                 <img src={logo} className={styles.logo} alt="logo" />
-                <div className={styles.circleEdit}>
+                <div
+                  className={styles.circleEdit}
+                  style={{ border: `${color} solid 1px` }}
+                >
                   <MdModeEdit className={styles.iconEdit} />
                 </div>
               </div>
@@ -190,6 +193,7 @@ function Users() {
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
+                setIsValid(false);
               }}
             />
           </label>
@@ -203,6 +207,7 @@ function Users() {
               placeholder="Digite seu telefone"
               value={phone}
               onChange={(e) => {
+                setIsValid(false);
                 setPhone(e.target.value);
               }}
             />
@@ -217,21 +222,8 @@ function Users() {
               placeholder="Digite sua senha"
               value={email}
               onChange={(e) => {
+                setIsValid(false);
                 setEmail(e.target.value);
-              }}
-            />
-          </label>
-
-          <label className={styles.label}>
-            Cor
-            <input
-              disabled={!checked}
-              className={styles.input}
-              type="text"
-              placeholder="Digite sua cor"
-              value={color}
-              onChange={(e) => {
-                setColor(e.target.value);
               }}
             />
           </label>
@@ -245,6 +237,7 @@ function Users() {
               placeholder="Digite sua nacionalidade"
               value={nationality}
               onChange={(e) => {
+                setIsValid(false);
                 setNationality(e.target.value);
               }}
             />
@@ -255,7 +248,6 @@ function Users() {
           style={{ backgroundColor: color, color: fontColor }}
           className={checked ? styles.button : styles.buttonDisabled}
           onClick={() => {
-            // handleUpdateUser();
             handleUpdatePhoto();
           }}
           type="submit"

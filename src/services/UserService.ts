@@ -13,6 +13,8 @@ class UserService {
   async getUser({ email }: IUser) {
     try {
       const response = await api.get(`/user/getuser?email=${email}`);
+      // console.log("getUserResponse", response.data);
+
       return response.data;
     } catch (error: any) {
       console.log("getUser", error.response.data);

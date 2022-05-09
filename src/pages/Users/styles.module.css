@@ -28,6 +28,8 @@
   margin: 0 auto;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .colorContainer {
@@ -39,10 +41,10 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   background-color: #fff;
-  margin-top: 10px;
+  margin-top: 100px;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 18.5px;
   padding: 10px;
   animation: fadeIn 0.5s;
 }
@@ -66,7 +68,22 @@
   display: flex;
   flex-direction: column;
   background: #fff;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 80%;
+  min-height: 120%;
+  height: 120%;
+  max-width: 700px;
+}
+
+.containerEdit {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   width: 80%;
   min-height: 120%;
   height: 120%;
@@ -76,7 +93,6 @@
 .containerEditColor {
   display: flex;
   flex-direction: column;
-  background: red;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   width: 10%;
@@ -102,8 +118,8 @@
   background: #fff;
   margin-left: 20px;
   margin-top: 50px;
-  border: #42c1c7 solid 1px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  border: #fff solid 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .circleActive {
@@ -128,7 +144,6 @@
   margin-left: 60px;
   margin-bottom: 90px;
   align-self: center;
-  border: #42c1c7 solid 1px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -188,7 +203,7 @@
 }
 
 .input:focus {
-  border: 1px solid #42c1c7;
+  border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px 15px;
   margin-bottom: 30px;
@@ -218,26 +233,9 @@
   padding: 10px;
   font-size: 20px;
   width: 40%;
-  background-color: #393939;
-  color: #fff;
-  cursor: pointer;
+  cursor: not-allowed;
+  color: #606060;
   font-size: large;
-  border: #393939 solid 1px;
-  align-self: center;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.buttonFile {
-  border: 0;
-  border-radius: 6px;
-  padding: 10px;
-  font-size: 20px;
-  width: 40%;
-  background-color: #393939;
-  color: #000;
-  cursor: pointer;
-  font-size: 15px;
   align-self: center;
   justify-content: center;
   margin-bottom: 30px;
@@ -246,4 +244,3 @@
 .bg_1 {
   background: #42c1c7;
 }
-

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import LoginService from "../services/LoginService";
-import Logo from "../assets/logo.png";
+import LoginService from "../../services/LoginService";
+import Logo from "../../assets/logo.png";
 import styles from "./styles.module.css";
 
 function Login() {
@@ -36,31 +36,33 @@ function Login() {
       </div>
 
       <div className={styles.form}>
-        <label className={styles.label}>
-          Email
-          <input
-            className={styles.input}
-            type="email"
-            placeholder="Digite seu Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-        </label>
+        <div className={styles.containerInput}>
+          <label className={styles.label}>
+            Email
+            <input
+              className={styles.input}
+              type="email"
+              placeholder="Digite seu Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </label>
 
-        <label className={styles.label}>
-          Senha
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="Digite sua senha"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </label>
+          <label className={styles.label}>
+            Senha
+            <input
+              className={styles.input}
+              type="password"
+              placeholder="Digite sua senha"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </label>
+        </div>
       </div>
       <input
         disabled={!email || !password}
