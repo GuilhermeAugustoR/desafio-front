@@ -23,9 +23,10 @@ class LoginService {
       const response = await api.post("/auth/login", body);
       const { access_token }: IToken = response.data;
 
-      api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+      api.defaults.headers.common.Authorization = `Bearer ${access_token}`;
 
       localStorage.setItem("access_token", access_token);
+
 
       return response.data;
     } catch (error: any) {

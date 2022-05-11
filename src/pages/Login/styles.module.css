@@ -5,16 +5,16 @@
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 80%;
-  min-height: 97vh;
+  max-height: 900px;
   height: 97vh;
-  max-width: 700px;
+  max-width: 660px;
   margin: 0 auto;
+  margin-top: 20px;
 }
 
 .containerHeader {
   display: flex;
-  background: #42c1c7;
+  background-color: #42c1c7;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   width: 100%;
@@ -32,6 +32,15 @@
   margin-top: 50px;
   border: #fff solid 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.loading {
+  height: 60px;
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-top: 15px;
 }
 
 .logo {
@@ -92,12 +101,12 @@
   padding: 10px;
   font-size: 20px;
   width: 55%;
-  background-color: #42c1c7;
   cursor: pointer;
   font-size: large;
   align-self: center;
   justify-content: center;
   margin-bottom: 30px;
+  background-color: #42c1c7;
 }
 
 .buttonDisabled {
@@ -107,10 +116,8 @@
   padding: 10px;
   font-size: 20px;
   width: 60%;
-  background-color: #393939;
-  color: #fff;
-  cursor: pointer;
+  cursor: not-allowed;
+  color: rgb(192, 187, 187);
   font-size: large;
-  border: #393939 solid 1px;
   align-self: center;
 }

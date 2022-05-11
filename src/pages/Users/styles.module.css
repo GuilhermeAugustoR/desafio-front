@@ -127,13 +127,18 @@
 }
 
 .logo {
-  height: 60px;
-  z-index: 999;
+  width: 90px;
+  height: 90px;
   align-items: center;
   justify-content: center;
   display: flex;
-  margin-top: 15px;
-  margin-left: 10px;
+  border-radius: 50px;
+}
+
+.logoInput {
+  width: 100%;
+  border-radius: 50%;
+  opacity: 0;
 }
 
 .circleEdit {
@@ -141,8 +146,8 @@
   height: 23px;
   border-radius: 50%;
   background: #fff;
-  margin-left: 60px;
-  margin-bottom: 90px;
+  margin-left: 90px;
+  margin-top: -20px;
   align-self: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
@@ -234,7 +239,7 @@
   font-size: 20px;
   width: 40%;
   cursor: not-allowed;
-  color: #606060;
+  color: rgb(192, 187, 187);
   font-size: large;
   align-self: center;
   justify-content: center;

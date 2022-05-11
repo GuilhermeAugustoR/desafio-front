@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LoginService from "../../services/LoginService";
-import Logo from "../../assets/logo.png";
 import styles from "./styles.module.css";
+import Loading from "../../components/Loading";
 
 function Login() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function Login() {
 
   React.useEffect(() => {
     handleUpdateUser();
-  }, [handleUpdateUser]);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -60,7 +60,13 @@ function Login() {
         style={{ backgroundColor: color }}
       >
         <div className={styles.circleLogo}>
-          <img src={photo} className={styles.logo} alt="logo" />
+          {!photo ? (
+            <div className={styles.loading}>
+              <Loading color={color} />
+            </div>
+          ) : (
+            <img src={photo} className={styles.logo} alt="logo" />
+          )}
         </div>
       </div>
 
@@ -72,7 +78,7 @@ function Login() {
               className={styles.input}
               type="email"
               placeholder="Digite seu Email"
-              value={email}
+              value={email.replace(/\s/g, "")}
               onChange={(e) => {
                 setEmail(e.target.value);
               }}

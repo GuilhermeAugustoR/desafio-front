@@ -1,10 +1,10 @@
 import React from "react";
-import { useDropzone } from "react-dropzone";
 import UserService from "../../services/UserService";
 import styles from "./styles.module.css";
 import logo from "../../assets/logo.png";
 import Switch from "react-switch";
 import { MdModeEdit } from "react-icons/md";
+import ImageUploading, { ImageListType } from "react-images-uploading";
 
 interface IColors {
   colors: string;
@@ -13,7 +13,6 @@ interface IColors {
 }
 
 function Users() {
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const [name, setName] = React.useState<string>("");
   const [color, setColor] = React.useState<string>("");
   const [fontColor, setFontColor] = React.useState<string>("");
@@ -21,25 +20,23 @@ function Users() {
   const [phone, setPhone] = React.useState<string>("");
   const [nationality, setNationality] = React.useState<string>("");
   const [isValid, setIsValid] = React.useState<boolean>(false);
-  // const [file, setFile] = React.useState<JSX.Element[]>(files);
+  const [file, setFile] = React.useState<any>();
 
   const [checked, setChecked] = React.useState<boolean>(false);
   const handleChange = (nextChecked: any) => {
     setChecked(nextChecked);
   };
 
-  const files = acceptedFiles.map((file) => (
-    <img src={URL.createObjectURL(file)} alt="logo" />
-  ));
-
   const handleUser = React.useCallback(async () => {
     try {
+      const token = localStorage.getItem("access_token");
       const result = await UserService.getUser({
         email,
         name,
         phone,
         color,
         nationality,
+        token,
       });
 
       if (!result) {
@@ -59,8 +56,8 @@ function Users() {
 
   const handleUpdateUser = React.useCallback(async () => {
     try {
+      // const rawColor = color.replace("#", "");
       const resultUpdate = await UserService.updateUser({
-        email,
         name,
         phone,
         color,
@@ -71,21 +68,29 @@ function Users() {
         return false;
       }
 
-      console.log("resultUpdate", resultUpdate);
+      console.log("Usuário Atualizado!");
       return handleUser();
     } catch (error: any) {
       console.log("UserService", error.response.data);
       return false;
     }
-  }, [color, email, handleUser, name, nationality, phone]);
+  }, [color, handleUser, name, nationality, phone]);
+
+  const onChange = (
+    imageList: ImageListType,
+    addUpdateIndex: number[] | undefined
+  ) => {
+    console.log(imageList, addUpdateIndex);
+    setFile(imageList as never[]);
+  };
 
   const handleUpdatePhoto = React.useCallback(async () => {
     try {
       const resultUpdatePhoto = await UserService.updatePhoto({
-        file: files,
+        file,
       });
 
-      console.log("file", files);
+      console.log("file", file);
 
       if (!resultUpdatePhoto) {
         return false;
@@ -96,7 +101,7 @@ function Users() {
       console.log("updatePhoto", error.response.data);
       return false;
     }
-  }, [files]);
+  }, [file]);
 
   React.useEffect(() => {
     handleUser();
@@ -150,21 +155,37 @@ function Users() {
           style={{ backgroundColor: color }}
         >
           {checked ? (
-            <div {...getRootProps()} className={styles.circleActive}>
-              <input {...getInputProps()} />
-              <div className={styles.circleLogo}>
-                <img src={logo} className={styles.logo} alt="logo" />
-                <div
-                  className={styles.circleEdit}
-                  style={{ border: `${color} solid 1px` }}
-                >
-                  <MdModeEdit className={styles.iconEdit} />
-                </div>
-              </div>
+            <div className={styles.circleActive}>
+              <ImageUploading value={file} onChange={onChange}>
+                {({ imageList, onImageUpload, dragProps }) => (
+                  <div>
+                    <div
+                      className={styles.circleLogo}
+                      onClick={onImageUpload}
+                      {...dragProps}
+                    >
+                      {imageList.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image.dataURL}
+                          className={styles.logo}
+                          alt="logo"
+                        />
+                      ))}
+                    </div>
+                    <div
+                      className={styles.circleEdit}
+                      style={{ border: `${color} solid 1px` }}
+                    >
+                      <MdModeEdit className={styles.iconEdit} />
+                    </div>
+                  </div>
+                )}
+              </ImageUploading>
             </div>
           ) : (
             <div className={styles.circleLogo}>
-              <img src={logo} className={styles.logo} alt="logo" />
+              <img src={file} className={styles.logo} alt="logo" />
             </div>
           )}
         </div>
@@ -190,7 +211,7 @@ function Users() {
               className={styles.input}
               type="text"
               placeholder="Digite seu email"
-              value={name}
+              value={name.replace(/[^a-zA-Z ]/g, "")}
               onChange={(e) => {
                 setName(e.target.value);
                 setIsValid(false);
@@ -201,15 +222,12 @@ function Users() {
           <label className={styles.label}>
             Telefone
             <input
+              maxLength={12}
               disabled={!checked}
               className={styles.input}
               type="text"
               placeholder="Digite seu telefone"
-              value={phone
-                .replace(/\D/g, "")
-                .replace(/(\d{2})(\d)/, "($1) $2 ")
-                .replace(/(\d{4})(\d)/, "$1-$2")
-                .replace(/(\d{4})(\d)/, "$1-$2")}
+              value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
                 setIsValid(false);
@@ -224,7 +242,7 @@ function Users() {
               className={styles.input}
               type="email"
               placeholder="Digite sua senha"
-              value={email}
+              value={email.replace(/\s/g, "")}
               onChange={(e) => {
                 setIsValid(false);
                 setEmail(e.target.value);
@@ -252,7 +270,9 @@ function Users() {
           style={{ backgroundColor: color, color: fontColor }}
           className={checked ? styles.button : styles.buttonDisabled}
           onClick={() => {
-            handleUpdatePhoto();
+            isValid ? handleUpdateUser() : handleUpdatePhoto();
+
+            // handleUpdatePhoto();
           }}
           type="submit"
           value="Editar"

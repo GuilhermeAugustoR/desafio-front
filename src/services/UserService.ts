@@ -3,16 +3,21 @@ import api from "./api";
 
 interface IUser {
   name: string;
-  email: string;
+  email?: string;
   phone: string;
   color: string;
   nationality: string;
+  token?: string | null;
 }
 
 class UserService {
-  async getUser({ email }: IUser) {
+  async getUser({ email, token }: IUser) {
     try {
-      const response = await api.get(`/user/getuser?email=${email}`);
+      const response = await api.get(`/user/getuser?email=${email}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       return response.data;
     } catch (error: any) {
@@ -21,10 +26,11 @@ class UserService {
     }
   }
 
-  async updateUser({ name, email, phone, color, nationality }: IUser) {
-    const body = { name, email, phone, color, nationality };
+  async updateUser({ name, phone, color, nationality }: IUser) {
+    const body = { name, phone, color, nationality };
     try {
       const response = await api.put("/user", body);
+
 
       return response.data;
     } catch (error: any) {
@@ -34,7 +40,7 @@ class UserService {
     }
   }
 
-  async updatePhoto({ file }: { file: JSX.Element[] }) {
+  async updatePhoto({ file }: any) {
     const formData = new FormData();
     formData.append("file", {
       file,
