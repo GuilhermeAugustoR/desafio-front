@@ -107,8 +107,12 @@
   width: 100%;
   height: 100px;
   max-height: 100px;
-  justify-content: center;
   margin-bottom: 30px;
+  justify-content: space-around;
+}
+
+.leftSide {
+  width: 7%;
 }
 
 .circleLogo {
@@ -116,14 +120,17 @@
   height: 90px;
   border-radius: 50%;
   background: #fff;
-  margin-left: 20px;
+  margin: auto;
   margin-top: 50px;
   border: #fff solid 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
 .circleActive {
-  cursor: pointer;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {
@@ -146,7 +153,7 @@
   height: 23px;
   border-radius: 50%;
   background: #fff;
-  margin-left: 90px;
+  margin-left: 55%;
   margin-top: -20px;
   align-self: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -155,10 +162,28 @@
 .iconEdit {
   width: 20px;
   height: 20px;
-  margin-top: 1px;
+}
+
+.logoutArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 10%,;
+  height: 100px;
+  max-height: 100px;
+}
+
+.iconLogout {
+  width: 23px;
+  height: 23px;
+  margin-top: 10px;
   margin-left: 2px;
+  margin-right: 5px;
   align-items: center;
   justify-content: center;
+  margin-left: 20px;
+  cursor: pointer;
+  color: #fff;
 }
 
 .toggle {

@@ -3,8 +3,16 @@ import UserService from "../../services/UserService";
 import styles from "./styles.module.css";
 import logo from "../../assets/logo.png";
 import Switch from "react-switch";
-import { MdModeEdit } from "react-icons/md";
+import { MdModeEdit, MdLogout, MdCheckCircleOutline } from "react-icons/md";
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
+const notify = () =>
+  toast("Usuário Atualizado com Sucesso!", {
+    icon: <MdCheckCircleOutline color="green" />,
+    style: { fontSize: "1.2rem" },
+  });
 
 interface IColors {
   colors: string;
@@ -13,6 +21,7 @@ interface IColors {
 }
 
 function Users() {
+  const navigate = useNavigate();
   const [name, setName] = React.useState<string>("");
   const [color, setColor] = React.useState<string>("");
   const [fontColor, setFontColor] = React.useState<string>("");
@@ -68,7 +77,6 @@ function Users() {
         return false;
       }
 
-      console.log("Usuário Atualizado!");
       return handleUser();
     } catch (error: any) {
       console.log("UserService", error.response.data);
@@ -102,6 +110,21 @@ function Users() {
       return false;
     }
   }, [file]);
+
+  const handleLogout = React.useCallback(async () => {
+    try {
+      const resultLogout = await UserService.logoutUser();
+
+      if (!resultLogout) {
+        return false;
+      }
+
+      return navigate("/");
+    } catch (error: any) {
+      console.log("updatePhoto", error.response.data);
+      return false;
+    }
+  }, [navigate]);
 
   React.useEffect(() => {
     handleUser();
@@ -144,6 +167,7 @@ function Users() {
             onClick={() => {
               setColor(color.colors);
               setFontColor(color.fontColor);
+              setIsValid(false);
             }}
           ></div>
         ))}
@@ -154,6 +178,7 @@ function Users() {
           className={styles.containerHeader}
           style={{ backgroundColor: color }}
         >
+          <div className={styles.leftSide} />
           {checked ? (
             <div className={styles.circleActive}>
               <ImageUploading value={file} onChange={onChange}>
@@ -161,7 +186,10 @@ function Users() {
                   <div>
                     <div
                       className={styles.circleLogo}
-                      onClick={onImageUpload}
+                      onClick={() => {
+                        onImageUpload();
+                        setIsValid(true);
+                      }}
                       {...dragProps}
                     >
                       {imageList.map((image, index) => (
@@ -188,6 +216,14 @@ function Users() {
               <img src={file} className={styles.logo} alt="logo" />
             </div>
           )}
+          <div
+            className={styles.logoutArea}
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            <MdLogout className={styles.iconLogout} />
+          </div>
         </div>
 
         <div className={styles.form}>
@@ -270,12 +306,33 @@ function Users() {
           style={{ backgroundColor: color, color: fontColor }}
           className={checked ? styles.button : styles.buttonDisabled}
           onClick={() => {
-            isValid ? handleUpdateUser() : handleUpdatePhoto();
-
-            // handleUpdatePhoto();
+            !isValid ? handleUpdateUser() : handleUpdatePhoto();
+            setChecked(false);
+            notify();
           }}
           type="submit"
           value="Editar"
+        />
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+          gutter={8}
+          containerClassName=""
+          toastOptions={{
+            className: "",
+            duration: 5000,
+            style: {
+              background: "#fff",
+              color: "#393939",
+            },
+            success: {
+              duration: 3000,
+              theme: {
+                primary: "green",
+                secondary: "black",
+              },
+            },
+          }}
         />
       </div>
     </div>

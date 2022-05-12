@@ -31,7 +31,6 @@ class UserService {
     try {
       const response = await api.put("/user", body);
 
-
       return response.data;
     } catch (error: any) {
       console.log("updateUser", error.response.data);
@@ -58,6 +57,18 @@ class UserService {
       return response.data;
     } catch (error: any) {
       console.log("updatePhoto", error.response.data);
+
+      return false;
+    }
+  }
+
+  async logoutUser() {
+    try {
+      const response = await api.post("/auth/logout");
+
+      return response.data;
+    } catch (error: any) {
+      console.log("logoutUser", error.response.data);
 
       return false;
     }
